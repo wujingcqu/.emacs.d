@@ -53,4 +53,14 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+;;; ------------------------------------------------------
+;;; ------------------------------------------------------
+;;; ibuffer mode key-binding
+;; m Mark
+;; u Unmark
+;; * u Mark unsaved
+;; S Save marked buffer
+;; D Close marked buffers
+;; k Kill marked buffer (the line in the ibuffer, not the buffer itself)
+
 (provide 'init-ibuffer)

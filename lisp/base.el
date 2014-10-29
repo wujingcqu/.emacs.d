@@ -155,9 +155,6 @@
 (setq speedbar-use-images nil);;不使用 image 的方式
 (setq speedbar-verbosity-level 0)
 
-;;让 dired 可以递归的拷贝和删除目录。
-(setq dired-recursive-copies 'top)
-(setq dired-recursive-deletes 'top)
 
 ;; 设置时间戳，标识出最后一次保存文件的时间。
 (setq time-stamp-active t)

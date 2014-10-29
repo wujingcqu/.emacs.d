@@ -1,0 +1,216 @@
+;;==============================================================
+;;gdb-UI配置
+;;==============================================================
+(setq gdb-many-windows t)
+(load-library "multi-gud")
+(load-library "multi-gdb-ui")
+
+
+
+;; Enable EDE (Project Management) features
+(global-ede-mode 1)
+
+;; Enable EDE for a pre-existing C++ project
+;; (ede-cpp-root-project "NAME" :file "~/myproject/Makefile")
+
+
+;; Enabling Semantic (code-parsing, smart completion) features
+;; Select one of the following:
+
+;; * This enables the database and idle reparse engines
+;;(semantic-load-enable-minimum-features)
+
+;; * This enables some tools useful for coding, such as summary mode
+;;   imenu support, and the semantic navigator
+;;(semantic-load-enable-code-helpers)
+
+;; * This enables even more coding tools such as intellisense mode
+;;   decoration mode, and stickyfunc mode (plus regular code helpers)
+;; (semantic-load-enable-gaudy-code-helpers)
+
+;; * This enables the use of Exuberent ctags if you have it installed.
+;;   If you use C++ templates or boost, you should NOT enable it.
+;; (semantic-load-enable-all-exuberent-ctags-support)
+;;   Or, use one of these two types of support.
+;;   Add support for new languges only via ctags.
+;; (semantic-load-enable-primary-exuberent-ctags-support)
+;;   Add support for using ctags as a backup parser.
+;; (semantic-load-enable-secondary-exuberent-ctags-support)
+
+;; Enable SRecode (Template management) minor-mode.
+ ;;(global-srecode-minor-mode 1)
+ 
+ ;;----------------------------------------------------------------------
+
+
+;;代码折叠
+(add-hook 'c-mode-common-hook   'hs-minor-mode)
+(global-set-key (kbd "C--") 'hs-toggle-hiding)
+
+;;==============================================================
+;;ecb配置
+;;==============================================================
+(require 'ecb)
+;;开启ecb用,M-x:ecb-activate
+(require 'ecb-autoloads)
+
+(setq ecb-auto-activate nil)
+(yas-global-mode 1)
+
+(require 'cc-mode)
+(c-set-offset 'inline-open 0)
+(c-set-offset 'friend '-)
+(c-set-offset 'substatement-open 0)
+
+
+(defun my-c-mode-common-hook()
+  (setq tab-width 4 indent-tabs-mode nil)
+  ;;; hungry-delete and auto-newline
+;;  (c-toggle-auto-hungry-state 1)
+  (define-key c-mode-base-map [(control \`)] 'hs-toggle-hiding)
+ (define-key c-mode-base-map [(return)] 'newline-and-indent)
+
+  (define-key c-mode-base-map [(meta \`)] 'c-indent-command)
+;;  (define-key c-mode-base-map [(tab)] 'hippie-expand)
+;;  (define-key c-mode-base-map [(tab)] 'my-indent-or-complete)
+;;  (define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
+  ;;预处理设置
+  (setq c-macro-shrink-window-flag t)
+  (setq c-macro-preprocessor "cpp")
+  (setq c-macro-cppflags " ")
+  (setq c-macro-prompt-flag t)
+  (setq hs-minor-mode t)
+  (setq abbrev-mode t)
+)
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(defun my-c++-mode-hook()
+  (setq tab-width 4 indent-tabs-mode nil)
+  (c-set-style "K&R")
+;;  (define-key c++-mode-map [f3] 'replace-regexp)
+)
+
+;;配置Semantic搜索范围
+(setq semanticdb-project-roots
+	  (list
+	   (expand-file-name "/")))
+;;自定义补全命令，如果单词在中间就补全，否则就tab
+(defun my-indent-or-complete()
+  (interactive)
+  (if (looking-at "\\>")
+	  (hippie-expand nil)
+	  (indent-for-tab-command))
+  )
+;;补全快捷键，ctrl+tab用senator补全，不显示列表
+;;alt+/补全，显示列表让选择
+(global-set-key [(control tab)] 'my-indent-or-complete)
+(define-key c-mode-base-map [(meta ?/)] 'semantic-ia-complete-symbol-menu)
+(autoload 'senator-try-expand-semantic "senator")
+(setq hippie-expand-try-functions-list
+	  '(
+		senator-try-expand-semantic
+		try-expand-dabbrev
+		try-expand-dabbrev-visible
+		try-expand-dabbrev-all-buffers
+		try-expand-dabbrev-from-kill
+		try-expand-list
+		try-expand-list-all-buffers
+		try-expand-line
+		try-expand-line-all-buffers
+		try-complete-file-name-partially
+		try-complete-file-name
+		try-expand-whole-kill
+		)
+	  )
+	  
+;;==========================================================
+;;加载cscope
+;;==========================================================
+(require 'xcscope)
+
+;; (custom-set-faces
+;;  '(my-tab-face            ((((class color)) (:background "grey10"))) t)
+;;  '(my-trailing-space-face ((((class color)) (:background "gray10"))) t)
+;;  '(my-long-line-face ((((class color)) (:background "gray10"))) t))
+
+(defun cc-mode-add-keywords (mode)
+  (font-lock-add-keywords 
+   mode
+   '(("\t+" (0 'my-tab-face append))
+     ("^.\\{81\\}\.+ $" (1 'my-long-line-face append)))))
+
+
+(cc-mode-add-keywords 'c-mode)
+(cc-mode-add-keywords 'cc-mode)
+(cc-mode-add-keywords 'c++-mode)
+(cc-mode-add-keywords 'perl-mode)
+(cc-mode-add-keywords 'python-mode)
+(setq default-fill-column 80)
+
+;;This setting is from the linux documentation/Codingstyle.txt
+;;M-x linux-c-mode will enable this settings
+(defun linux-c-mode ()
+  "C mode with adjusted defaults for use with the Linux kernel."
+  (interactive)
+  (c-mode)
+  (c-set-style "K&R")
+  (setq tab-width 8)
+  (setq indent-tabs-mode t)
+  (setq c-basic-offset 8))
+
+;;M-x fci-mode will enbale line indicator
+(require 'fill-column-indicator)
+
+
+
+(setq c-eldoc-includes "`pkg-config gtk+-2.0 --cflags` -I./ -I../ ")
+(load "c-eldoc")
+(add-hook 'c-mode-common-hook 'c-turn-on-eldoc-mode)
+
+(define-skeleton skeleton-include
+"generate include""" ""
+> "#include \""
+(completing-read "Include File:"
+                   (mapcar #'(lambda (f) (list f ))
+                           (apply 'append
+                                  (mapcar
+                                   #'(lambda (dir)
+                                       (directory-files dir))
+                                   (list "/usr/include"
+                    "./"
+                                         "/usr/local/include"
+                                         "/usr/include/c++/4.6"
+                    "/usr/include/c++/4.6.3"
+                    )))))
+"\"")
+
+(defun my-javadoc-return () 
+  "Advanced `newline' command for Javadoc multiline comments.   
+Insert a `*' at the beggining of the new line if inside of a comment."
+  (interactive "*")
+  (let* ((last (point))
+         (is-inside
+          (if (search-backward "*/" nil t)
+              ;; there are some comment endings - search forward
+              (search-forward "/*" last t)
+            ;; it's the only comment - search backward
+            (goto-char last)
+            (search-backward "/*" nil t))))
+
+    ;; go to last char position
+    (goto-char last)
+
+    ;; the point is inside some comment, insert `*'
+    (if is-inside
+        (progn
+          (newline-and-indent)
+          (insert "*"))
+      ;; else insert only new-line
+      (newline))))
+
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (local-set-key (kbd "<RET>") 'my-javadoc-return)))
+
+(setq ac-auto-start t)
+
+(provide 'code)

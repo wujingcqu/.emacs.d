@@ -191,32 +191,13 @@
 (autoload 'rm-example-picture-mode-bindings "rect-mark"
   "Example rect-mark key and mouse bindings for picture mode.")
 
+;;; highlight parentheses surrounding cursor
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
 
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
-
-(mapc (lambda (mode)
-         (add-hook 'LaTeX-mode-hook mode))
-         (list 'auto-fill-mode
-               'LaTeX-math-mode
-               'turn-on-reftex
-               'linum-mode))
-
-(add-hook 'LaTeX-mode-hook
-              (lambda ()
-                (setq TeX-auto-untabify t     ; remove all tabs before saving
-					  Tex-engine 'xelatex
-					  TeX-show-compilation t) ; display compilation windows
-                (TeX-global-PDF-mode t)       ; PDF mode enable, not plain
-                (setq TeX-save-query nil)
-                (imenu-add-menubar-index)
-                (define-key LaTeX-mode-map (kbd "TAB") 'TeX-complete-symbol)))
-
-;;use emacs to spell check
-(setq-default ispell-program-name "aspell")
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'LaTeX-mode-hook 'flyspell-mode)
-(require 'auto-complete-auctex)
 
 (require 'wcy-desktop) 
 (wcy-desktop-init)
@@ -229,6 +210,7 @@
 	    		 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
 )
 (toggle-fullscreen)
+
 
 ;;set eshell environment variable
 ;;ccache is used to accelerate the compiling process

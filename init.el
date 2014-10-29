@@ -56,7 +56,6 @@
 (require 'init-ido)
 (require 'init-hippie-expand)
 (require 'init-auto-complete)
-(require 'init-windows)
 ;;(require 'init-sessions)
 (require 'init-fonts)
 (require 'init-mmm)
@@ -69,19 +68,12 @@
 (require 'init-github)
 
 ;;(require 'init-compile)
-(require 'init-crontab)
 (require 'init-textile)
 (require 'init-markdown)
 (require 'init-csv)
-(require 'init-javascript)
 (require 'init-org)
-(require 'init-html)
-(require 'init-css)
 (require 'init-python-mode)
 (require 'init-haskell)
-(require 'init-ruby-mode)
-(require 'init-rails)
-
 (require 'init-paredit)
 (require 'init-lisp)
 
@@ -95,7 +87,15 @@
 (require 'kbd)
 (setq idle-require-idle-delay 5)
 (setq idle-require-symbols '(yasnippet
-							 init-spelling))
+                             init-auctex
+                             init-doxygen
+							 init-spelling
+                             init-ruby-mode
+                             init-css
+                             init-rails
+                             init-html
+                             init-javascript
+                             init-windows))
 (idle-require-mode 1) ;; starts loading
 
 

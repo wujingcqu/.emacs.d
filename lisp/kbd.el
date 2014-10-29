@@ -29,12 +29,16 @@
   (save-some-buffers t)
   (switch-to-buffer-other-window "*compilation*")
   (compile compile-command))
-  
-(setq-default compile-command "make")    
+
+(setq-default compile-command "make")
 (global-set-key [C-f7] 'compile)
 (global-set-key [f7] 'du-onekey-compile)
 
+(require 'multi-term)
+(setq multi-term-program "/bin/bash")
 
+(add-hook 'term-mode-hook (lambda()
+        (setq yas-dont-activate t)))
 ;;目的是开一个shell的小buffer，用于更方便地测试程序(也就是运行程序了)，我经常会用到。
 ;;f8就是另开一个buffer然后打开shell，C-f8则是在当前的buffer打开shell,shift+f8清空eshell
 (defun open-eshell-other-buffer ()
@@ -47,7 +51,7 @@
   "Open eshell in other buffer"
   (interactive)
   (split-window-vertically)
-  (shell))
+  (multi-term))
 
 (defun my-eshell-clear-buffer ()
   "Eshell clear buffer."
@@ -156,13 +160,6 @@ Don't mess with special buffers."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;屏蔽这个快捷键，使能中文输入法切换
 (global-set-key (kbd "C-SPC") 'nil)
-;;使用简单的doxymac插入文件、函数、单行、多行注释
-;;按键绑定:f-->function, i-->file, s-->single, s-->multiple
-(require 'doxygen)
-(global-set-key (kbd "C-C d f") 'doxygen-insert-function-comment)
-(global-set-key (kbd "C-C d i") 'doxygen-insert-file-comment)
-(global-set-key (kbd "C-C d s") 'doxygen-insert-compound-comment)
-(global-set-key (kbd "C-C d m") 'doxygen-insert-comment)
 
 ;;fast switch between dual monitors
 (global-set-key (kbd "M-RET")   'other-frame)

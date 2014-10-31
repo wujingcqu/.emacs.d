@@ -83,7 +83,9 @@
 (setq c-basic-offset 4)
 (global-set-key "\C-m" 'reindent-then-newline-and-indent)
 
-
+(defun my-tabs-makefile-hook ()
+  (setq indent-tabs-mode t))
+(add-hook 'makefile-mode-hook 'my-tabs-makefile-hook)
 
 ;;设置默认工作目录
 (setq default-directory "~/work/") 

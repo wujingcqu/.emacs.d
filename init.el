@@ -22,7 +22,7 @@
 (require 'init-utils)
 (require 'init-site-lisp) ;; Must come before elpa, as it may provide package.el
 (require 'init-elpa)      ;; Machinery for installing required packages
-(require 'init-exec-path) ;; Set up $PATH
+(require 'init-exec-path) ;; Set up $PA
 
 ;;----------------------------------------------------------------------------
 ;; Allow users to provide an optional "init-preload-local.el"
@@ -42,7 +42,6 @@
 (require 'init-frame-hooks)
 (require 'init-xterm)
 (require 'init-themes)
-(require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-proxies)
 (require 'init-dired)
@@ -67,20 +66,17 @@
 (require 'init-git)
 (require 'init-github)
 
-;;(require 'init-compile)
 (require 'init-textile)
 (require 'init-markdown)
 (require 'init-csv)
 (require 'init-org)
-(require 'init-python-mode)
-(require 'init-haskell)
-(require 'init-paredit)
+
 (require 'init-lisp)
 
 (require 'init-common-lisp)
 (require 'init-cc-mode)
+(require 'init-compile)
 
-(require 'init-marmalade)
 (require 'init-misc)
 
 (require 'base)
@@ -90,17 +86,17 @@
                              init-auctex
                              init-doxygen
 							 init-spelling
-                             init-ruby-mode
-                             init-css
-                             init-rails
-                             init-html
-                             init-javascript
-                             init-windows))
+                             ;; init-ruby-mode
+                             ;; init-css
+                             ;; init-rails
+                             ;; init-html
+                             ;; init-javascript
+                             ;; init-python-mode
+                             ;; init-haskell
+                             ))
 (idle-require-mode 1) ;; starts loading
 
 
-(require 'init-dash)
-(require 'init-ledger)
 ;; Extra packages which don't require any configuration
 
 (require-package 'gnuplot)

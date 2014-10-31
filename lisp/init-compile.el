@@ -1,23 +1,15 @@
-(setq-default compilation-scroll-output t)
+(setq-default compile-command "make")
 
-(require-package 'alert)
+;;  C-f7, 设置编译命令; f7, 保存所有文件然后编译当前窗口文件
+(defun du-onekey-compile ()
+  "Save buffers and start compile"
+  (interactive)
+  (save-some-buffers t)
+  (compile compile-command)
+  (switch-to-buffer-other-window "*compilation*"))
 
-;; Customize `alert-default-style' to get messages after compilation
 
-(defun sanityinc/alert-after-compilation-finish (buf result)
-  "Use `alert' to report compilation RESULT if BUF is hidden."
-  (let ((buf-is-visible nil))
-    (walk-windows (lambda (w)
-                    (when (eq (window-buffer w) buf)
-                      (setq buf-is-visible t))))
-    (unless buf-is-visible
-      (alert (concat "Compilation " result)
-             :buffer buf
-             :category 'compilation))))
-
-(after-load 'compile
-  (add-hook 'compilation-finish-functions
-            'sanityinc/alert-after-compilation-finish))
+(global-set-key [f7] 'du-onekey-compile)
 
 
 (provide 'init-compile)

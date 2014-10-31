@@ -22,17 +22,6 @@
 
 (global-set-key [f6] 'gdb)
 
-;;  C-f7, 设置编译命令; f7, 保存所有文件然后编译当前窗口文件
-(defun du-onekey-compile ()
-  "Save buffers and start compile"
-  (interactive)
-  (save-some-buffers t)
-  (switch-to-buffer-other-window "*compilation*")
-  (compile compile-command))
-
-(setq-default compile-command "make")
-(global-set-key [C-f7] 'compile)
-(global-set-key [f7] 'du-onekey-compile)
 
 (require 'multi-term)
 (setq multi-term-program "/bin/bash")
@@ -74,21 +63,23 @@
 
 ;;设置C-F12 快速察看日程安排
 ;;F12调到函数定义
-(global-set-key [f12] 'semantic-ia-fast-jump)
+;;(global-set-key [f12] 'semantic-ia-fast-jump)
 (global-set-key [C-f12] 'list-bookmarks)
 ;;shift-f12跳回去
-(global-set-key [S-f12]
-	(lambda ()
-	(interactive)
-	(if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
-	(error "Semantic Bookmark ring is currently empty"))
-	(let* ((ring (oref semantic-mru-bookmark-ring ring))
-	(alist (semantic-mrub-ring-to-assoc-list ring))
-	(first (cdr (car alist))))
-	(if (semantic-equivalent-tag-p (oref first tag)
-	(semantic-current-tag))
-	(setq frist (cdr (car (cdr alist)))))
-	(semantic-mrub-switch-tags first))))
+;; (global-set-key [S-f12]
+;; 	(lambda ()
+;; 	(interactive)
+;; 	(if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
+;; 	(error "Semantic Bookmark ring is currently empty"))
+;; 	(let* ((ring (oref semantic-mru-bookmark-ring ring))
+;; 	(alist (semantic-mrub-ring-to-assoc-list ring))
+;; 	(first (cdr (car alist))))
+;; 	(if (semantic-equivalent-tag-p (oref first tag)
+;; 	(semantic-current-tag))
+;; 	(setq frist (cdr (car (cdr alist)))))
+;; 	(semantic-mrub-switch-tags first))))
+(global-set-key [f12] 'ggtags-find-tag-dwim)
+(global-set-key [S-f12] 'ggtags-prev-mark)
 
 ;;==================ecb的配置=================================
 ;;为了ecb窗口的切换

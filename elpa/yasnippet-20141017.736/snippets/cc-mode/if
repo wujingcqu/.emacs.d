@@ -1,6 +1,0 @@
-#name : if (...) { ... }
-# key: cc-if
-# --
-if (${1:condition}) {
-    $0
-}
